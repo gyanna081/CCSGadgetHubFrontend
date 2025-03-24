@@ -1,0 +1,130 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Full-page layout */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #545454; /* Grey background */
+    width: 100vw;
+}
+
+/* Login box - Desktop First */
+.login-box {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 400px;
+    min-width: 360px; /* Prevents shrinking too much */
+}
+
+/* Logo Styling */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+}
+
+/* Error message */
+.error {
+    color: #E26901;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Input fields */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #ffffff;
+    color: #000000;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+input:focus {
+    border-color: #E26901;
+}
+
+/* Placeholder */
+input::placeholder {
+    color: #909090;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #E26901;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #d35b00;
+}
+
+button:disabled {
+    background: #f0945c;
+    cursor: not-allowed;
+}
+
+/* Toggle text for switching between Login & Signup */
+.toggle-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #545454;
+}
+
+.toggle-text span {
+    color: #E26901;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.toggle-text span:hover {
+    text-decoration: underline;
+}
+
+/* Desktop spacing */
+@media (min-width: 768px) {
+    .login-box {
+        width: 420px;
+    }
+}
+
+/* Mobile-friendly */
+@media (max-width: 480px) {
+    .login-box {
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .logo {
+        width: 120px;
+    }
+}
