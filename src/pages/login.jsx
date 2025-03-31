@@ -2,8 +2,7 @@ import { useState } from "react";
 import { auth, provider } from "../firebaseconfig";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "../pages/login.css";
-import logo from "../assets/CCSGadgetHub.png"; // Ensure the correct path
+import logo from "../assets/CCSGadgetHub.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -32,75 +31,65 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="logo-container">
-          <img src={logo} alt="CCS GadgetHub Logo" className="logo" />
+    <div style={{
+      display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", width: "100vw", background: "#545454"
+    }}>
+      <div style={{
+        background: "#ffffff", padding: "3rem", borderRadius: "12px", boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)", textAlign: "center", width: "400px", maxWidth: "90%"
+      }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+          <img src={logo} alt="CCS GadgetHub Logo" style={{ width: "200px", height: "auto", transition: "transform 0.3s ease" }} />
         </div>
-
-        <h2 className="login-title">Welcome Back</h2>
-        <p className="login-subtitle">Sign in to your account</p>
+        
+        <h2 style={{ color: "#000", fontSize: "26px", fontWeight: "600", marginBottom: "10px" }}>Welcome Back</h2>
+        <p style={{ color: "#545454", fontSize: "18px", marginBottom: "28px" }}>Sign in to your account</p>
 
         {error && (
-          <div className="error-message">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
+          <div style={{ display: "flex", alignItems: "center", backgroundColor: "rgba(226, 105, 1, 0.1)", color: "#E26901", fontSize: "14px", padding: "12px", borderRadius: "6px", marginBottom: "16px" }}>
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="input-group">
-            <label htmlFor="email">Email</label>
+        <form onSubmit={handleLogin} style={{ marginBottom: "16px" }}>
+          <div style={{ marginBottom: "16px", textAlign: "left" }}>
+            <label style={{ display: "block", color: "#545454", fontSize: "16px", marginBottom: "6px", fontWeight: "500" }}>Email</label>
             <input
-              id="email"
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              style={{ width: "100%", padding: "14px 18px", border: "1px solid #dcdcdc", borderRadius: "8px", fontSize: "16px" }}
             />
           </div>
 
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
+          <div style={{ marginBottom: "16px", textAlign: "left" }}>
+            <label style={{ display: "block", color: "#545454", fontSize: "16px", marginBottom: "6px", fontWeight: "500" }}>Password</label>
             <input
-              id="password"
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              style={{ width: "100%", padding: "14px 18px", border: "1px solid #dcdcdc", borderRadius: "8px", fontSize: "16px" }}
             />
           </div>
 
-          <div className="forgot-password">
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              Forgot password?
-            </a>
-          </div>
-
-          <button type="submit" className="login-button">
-            Sign In
-          </button>
+          <button type="submit" style={{ width: "100%", padding: "14px", background: "#E26901", color: "white", fontSize: "16px", fontWeight: "600", borderRadius: "8px", cursor: "pointer", border: "none" }}>Sign In</button>
         </form>
-
-        <div className="separator">
-          <span>or</span>
+        
+        <div style={{ display: "flex", alignItems: "center", textAlign: "center", margin: "24px 0" }}>
+          <span style={{ flex: 1, borderBottom: "1px solid #dcdcdc" }}></span>
+          <span style={{ padding: "0 10px", color: "#909090", fontSize: "14px" }}>or</span>
+          <span style={{ flex: 1, borderBottom: "1px solid #dcdcdc" }}></span>
         </div>
 
-        <button onClick={handleGoogleLogin} className="google-button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#E26901">
-            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
-          </svg>
+        <button onClick={handleGoogleLogin} style={{ width: "100%", padding: "14px", background: "#ffffff", color: "#545454", fontSize: "16px", fontWeight: "600", borderRadius: "8px", cursor: "pointer", border: "1px solid #dcdcdc" }}>
           Sign in with Google
         </button>
 
-        <div className="toggle-text">
-          Don't have an account? <span>Sign Up</span>
+        <div style={{ marginTop: "20px", fontSize: "16px", color: "#545454" }}>
+          Don't have an account? <span style={{ color: "#E26901", fontWeight: "600", cursor: "pointer" }}>Sign Up</span>
         </div>
       </div>
     </div>

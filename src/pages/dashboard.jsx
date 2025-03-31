@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebaseconfig";
 import { signOut } from "firebase/auth";
-import "../pages/dashboard.css";
+import logo from "../assets/CCSGadgetHub1.png"; // Import the logo
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -16,46 +16,123 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3E0]">
+    <div style={{ minHeight: "100vh", backgroundColor: "#FAF3E0", fontSize: "20px" }}>
       {/* Navigation Bar */}
-      <div className="bg-[#D96528] text-white p-4 flex justify-between items-center">
-        <div className="text-2xl font-bold">CCS Gadget Hub</div>
-        <nav className="flex space-x-6 font-medium">
-          <a href="#" className="hover:underline">Dashboard</a>
-          <a href="#" className="hover:underline">Items</a>
-          <a href="#" className="hover:underline">My Requests</a>
-          <a href="#" className="hover:underline">Activity Log</a>
-          <a href="#" className="hover:underline">Profile</a>
+      <div
+        style={{
+          backgroundColor: "#D96528",
+          color: "white",
+          padding: "16px",
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        {/* Logo */}
+        <img
+          src={logo}
+          alt="CCS Gadget Hub Logo"
+          style={{ height: "100px", marginRight: "20px" }} // Adjust spacing
+        />
+
+        {/* Navigation Links */}
+        <nav style={{ display: "flex", gap: "40px", fontWeight: "500" }}>
+          <a href="#" style={{ textDecoration: "none", color: "white" }}>
+            Dashboard
+          </a>
+          <a href="#" style={{ textDecoration: "none", color: "white" }}>
+            Items
+          </a>
+          <a href="#" style={{ textDecoration: "none", color: "white" }}>
+            My Requests
+          </a>
+          <a href="#" style={{ textDecoration: "none", color: "white" }}>
+            Activity Log
+          </a>
+          <a href="#" style={{ textDecoration: "none", color: "white" }}>
+            Profile
+          </a>
         </nav>
-        <button 
-          onClick={handleLogout} 
-          className="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 transition">
-          Log Out
-        </button>
+
+        {/* Push Log Out Button to the Right */}
+        <div style={{ marginLeft: "auto" }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              backgroundColor: "#444",
+              padding: "8px 16px",
+              borderRadius: "5px",
+              color: "white",
+              cursor: "pointer",
+              border: "none",
+            }}
+          >
+            Log Out
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
-      <div className="p-6 max-w-5xl mx-auto">
+      <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
         {/* Search Bar & Buttons */}
-        <div className="flex items-center space-x-4 mb-6">
-          <input 
-            type="text" 
-            placeholder="Enter items here" 
-            className="p-2 border rounded flex-grow"
+        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+          <input
+            type="text"
+            placeholder="Enter items here"
+            style={{
+              flexGrow: 1,
+              padding: "10px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+            }}
           />
-          <button className="bg-[#D96528] text-white px-4 py-2 rounded hover:bg-[#B8501B] transition">
+          <button
+            style={{
+              backgroundColor: "#D96528",
+              color: "white",
+              padding: "10px 16px",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
             Borrow Item
           </button>
-          <button className="bg-[#D96528] text-white px-4 py-2 rounded hover:bg-[#B8501B] transition">
+          <button
+            style={{
+              backgroundColor: "#D96528",
+              color: "white",
+              padding: "10px 16px",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
             View Requests
           </button>
         </div>
 
         {/* Featured Items */}
-        <h2 className="text-xl font-bold mb-4">Featured Items</h2>
-        <div className="grid grid-cols-3 gap-6">
+        <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "16px" }}>
+          Featured Items
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "20px",
+          }}
+        >
           {[...Array(6)].map((_, index) => (
-            <div key={index} className="bg-white p-4 h-40 rounded shadow-md"></div>
+            <div
+              key={index}
+              style={{
+                backgroundColor: "white",
+                height: "150px",
+                borderRadius: "10px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            ></div>
           ))}
         </div>
       </div>
