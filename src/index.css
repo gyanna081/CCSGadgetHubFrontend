@@ -7,7 +7,7 @@
   --button-bg: #d96528;
   --button-hover: #b8501b;
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   text-rendering: optimizeLegibility;
@@ -16,15 +16,6 @@
 
   color: var(--text-color);
   background-color: var(--bg-color);
-}
-
-/* Light & Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: rgba(255, 255, 255, 0.87);
-    --bg-color: #242424;
-    --secondary-color: #1a1a1a;
-  }
 }
 
 /* General Resets */
@@ -39,6 +30,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--bg-color);
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 /* Links */
@@ -50,16 +42,16 @@ a {
 }
 
 a:hover {
-  color: #b8501b;
+  color: var(--button-hover);
 }
 
 /* Buttons */
 button {
+  font-family: 'IBM Plex Sans', sans-serif;
   border-radius: 8px;
   border: none;
   padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  font-size: 16px;
   background-color: var(--button-bg);
   color: white;
   cursor: pointer;
@@ -81,6 +73,12 @@ h2 {
   font-weight: bold;
 }
 
+/* Dashboard Page */
+.dashboard-page {
+  min-height: 100vh;
+  background-color: #FAF3E0;
+}
+
 /* Navbar */
 .navbar {
   width: 100%;
@@ -88,32 +86,51 @@ h2 {
   background-color: var(--primary-color);
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
+.navbar img {
+  height: 100px;
+  margin-right: 20px;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 40px;
+  margin-left: 50px;
+}
+
 .navbar a {
-  margin: 0 15px;
   color: white;
-  font-weight: bold;
+  margin: 0 20px;
+  transition: color 0.3s ease;
 }
 
 .navbar a:hover {
-  text-decoration: underline;
+  color: black;
+  text-decoration: none;
 }
 
-/* Container */
-.container {
-  width: 90%;
+.logout-button {
+  background-color: #444;
+  padding: 8px 16px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+.dashboard-container {
+  padding: 20px;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 /* Search Bar */
 .search-container {
   display: flex;
   gap: 10px;
-  margin: 20px 0;
+  margin-bottom: 20px;
 }
 
 .search-container input {
@@ -123,15 +140,34 @@ h2 {
   border-radius: 5px;
 }
 
+.custom-button {
+  background-color: var(--button-bg);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: var(--button-hover);
+}
+
+.featured-title {
+  font-size: 25px;
+  margin-bottom: 16px;
+  color: black;
+}
+
 /* Featured Items */
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
 .item-box {
-  background-color: var(--secondary-color);
+  background-color: white;
   height: 150px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -150,4 +186,69 @@ h2 {
   .search-container {
     flex-direction: column;
   }
+}
+
+
+/* Items Page */
+.items-page {
+  min-height: 100vh;
+  background-color: #faf3e0;
+}
+
+.items-heading {
+  color: black;
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+/* Items Grid */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Item Box */
+.item-box {
+  background-color: white;
+  height: 150px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Item Status */
+.item-status {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Borrow Button */
+.borrow-btn {
+  background-color: #d96528;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* Not Available Button */
+.not-available-btn {
+  background-color: #ccc;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+}
+
+.navbar-link.active-link {
+  color: black; /* Change active link color to black */
 }

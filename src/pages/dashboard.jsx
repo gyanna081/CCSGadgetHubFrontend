@@ -1,138 +1,69 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { auth } from "../firebaseconfig";
 import { signOut } from "firebase/auth";
-import logo from "../assets/CCSGadgetHub1.png"; // Import the logo
+import logo from "../assets/CCSGadgetHub1.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/"); // Redirect to login page
+      navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
   };
 
+  const navLinks = [
+    { label: "Dashboard", to: "/dashboard" },
+    { label: "Items", to: "/items" },
+    { label: "My Requests", to: "/my-requests" },
+    { label: "Activity Log", to: "/activity-log" },
+    { label: "Profile", to: "/profile" },
+  ];
+
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#FAF3E0", fontSize: "20px" }}>
+    <div className="dashboard-page">
       {/* Navigation Bar */}
-      <div
-        style={{
-          backgroundColor: "#D96528",
-          color: "white",
-          padding: "16px",
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        {/* Logo */}
-        <img
-          src={logo}
-          alt="CCS Gadget Hub Logo"
-          style={{ height: "100px", marginRight: "20px" }} // Adjust spacing
-        />
-
-        {/* Navigation Links */}
-        <nav style={{ display: "flex", gap: "40px", fontWeight: "500" }}>
-          <a href="#" style={{ textDecoration: "none", color: "white" }}>
-            Dashboard
-          </a>
-          <a href="#" style={{ textDecoration: "none", color: "white" }}>
-            Items
-          </a>
-          <a href="#" style={{ textDecoration: "none", color: "white" }}>
-            My Requests
-          </a>
-          <a href="#" style={{ textDecoration: "none", color: "white" }}>
-            Activity Log
-          </a>
-          <a href="#" style={{ textDecoration: "none", color: "white" }}>
-            Profile
-          </a>
+      <div className="navbar">
+        <img src={logo} alt="CCS Gadget Hub Logo" />
+        <nav>
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              style={{
+                color:
+                  location.pathname === link.to ? "black" : "white",
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
-
-        {/* Push Log Out Button to the Right */}
         <div style={{ marginLeft: "auto" }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: "#444",
-              padding: "8px 16px",
-              borderRadius: "5px",
-              color: "white",
-              cursor: "pointer",
-              border: "none",
-            }}
-          >
+          <button className="logout-button" onClick={handleLogout}>
             Log Out
           </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div className="dashboard-container">
         {/* Search Bar & Buttons */}
-        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          <input
-            type="text"
-            placeholder="Enter items here"
-            style={{
-              flexGrow: 1,
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-            }}
-          />
-          <button
-            style={{
-              backgroundColor: "#D96528",
-              color: "white",
-              padding: "10px 16px",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Borrow Item
-          </button>
-          <button
-            style={{
-              backgroundColor: "#D96528",
-              color: "white",
-              padding: "10px 16px",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            View Requests
-          </button>
+        <div className="search-container">
+          <input type="text" placeholder="Enter items here" />
+          <button className="custom-button">Borrow Item</button>
+          <button className="custom-button">View Requests</button>
         </div>
 
         {/* Featured Items */}
-        <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "16px" }}>
-          Featured Items
-        </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <h2 className="featured-title">Featured Items</h2>
+        <div className="items-grid">
           {[...Array(6)].map((_, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: "white",
-                height: "150px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              }}
-            ></div>
+            <div key={index} className="item-box"></div>
           ))}
         </div>
       </div>
