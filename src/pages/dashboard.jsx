@@ -34,10 +34,11 @@ const Dashboard = () => {
             <Link
               key={link.to}
               to={link.to}
-              style={{
-                color:
-                  location.pathname === link.to ? "black" : "white",
-              }}
+              className={
+                location.pathname === link.to
+                  ? "navbar-link active-link"
+                  : "navbar-link"
+              }
             >
               {link.label}
             </Link>
@@ -55,14 +56,18 @@ const Dashboard = () => {
         {/* Search Bar & Buttons */}
         <div className="search-container">
           <input type="text" placeholder="Enter items here" />
-          <button className="custom-button">Borrow Item</button>
-          <button className="custom-button">View Requests</button>
+          <button className="custom-button" onClick={() => navigate("/items")}>
+            Borrow Item
+          </button>
+          <button className="custom-button" onClick={() => navigate("/my-requests")}>
+            View Requests
+          </button>
         </div>
 
         {/* Featured Items */}
         <h2 className="featured-title">Featured Items</h2>
         <div className="items-grid">
-          {[...Array(6)].map((_, index) => (
+          {[...Array(3)].map((_, index) => (
             <div key={index} className="item-box"></div>
           ))}
         </div>

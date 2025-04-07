@@ -1,25 +1,28 @@
+// Items.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/CCSGadgetHub1.png";  // Assuming logo is also used in items page
+import logo from "../assets/CCSGadgetHub1.png";
 
 const Items = () => {
   const [items, setItems] = useState([]);
-  const location = useLocation();  // Used for active link styling
+  const [availabilityFilter, setAvailabilityFilter] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState(""); 
+
+  const location = useLocation();
 
   useEffect(() => {
-    // Example data for laptop items
     const fetchedItems = [
-      { id: 1, name: "Laptop 1", available: true },
-      { id: 2, name: "Laptop 2", available: true },
-      { id: 3, name: "Laptop 3", available: false },
-      { id: 4, name: "Laptop 4", available: true },
-      { id: 5, name: "Laptop 5", available: false },
-      { id: 6, name: "Laptop 6", available: true },
+      { id: 1, name: "Laptop 1", available: true, rating: 5 },
+      { id: 2, name: "Laptop 2", available: true, rating: 4 },
+      { id: 3, name: "Laptop 3", available: false, rating: 3 },
+      { id: 4, name: "Laptop 4", available: true, rating: 5 },
+      { id: 5, name: "Laptop 5", available: false, rating: 3 },
+      { id: 6, name: "Laptop 6", available: true, rating: 4 },
     ];
     setItems(fetchedItems);
   }, []);
 
-  // Define navigation links just like in Dashboard
   const navLinks = [
     { label: "Dashboard", to: "/dashboard" },
     { label: "Items", to: "/items" },
@@ -27,6 +30,22 @@ const Items = () => {
     { label: "Activity Log", to: "/activity-log" },
     { label: "Profile", to: "/profile" },
   ];
+
+  const filteredItems = items.filter((item) => {
+    const matchesAvailability =
+      availabilityFilter === "all" ||
+      (availabilityFilter === "available" && item.available) ||
+      (availabilityFilter === "not-available" && !item.available);
+
+    const matchesRating =
+      ratingFilter === "all" || item.rating === parseInt(ratingFilter);
+
+    const matchesSearch = item.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
+    return matchesAvailability && matchesRating && matchesSearch;
+  });
 
   return (
     <div className="items-page">
@@ -51,25 +70,67 @@ const Items = () => {
 
       {/* Main Content */}
       <div className="dashboard-container">
-        <h2 className="featured-title">Available Laptops</h2>
+        <h2 className="featured-title">Items</h2>
+
+        {/* 🔍 Search Bar */}
+        <div className="search-bar" style={{ marginBottom: "15px" }}>
+          <input
+            type="text"
+            placeholder="Search by item name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              width: "370px",
+            }}
+          />
+        </div>
+
+        {/* Filters */}
+        <div className="filter-container" style={{ marginBottom: "20px" }}>
+          <label>
+            Status:
+            <select
+              value={availabilityFilter}
+              onChange={(e) => setAvailabilityFilter(e.target.value)}
+              style={{ marginLeft: "8px", marginRight: "20px" }}
+            >
+              <option value="all">All</option>
+              <option value="available">Available</option>
+              <option value="not-available">Not Available</option>
+            </select>
+          </label>
+
+          <label>
+            Rating:
+            <select
+              value={ratingFilter}
+              onChange={(e) => setRatingFilter(e.target.value)}
+              style={{ marginLeft: "8px" }}
+            >
+              <option value="all">All</option>
+              <option value="3">3 stars</option>
+              <option value="4">4 stars</option>
+              <option value="5">5 stars</option>
+            </select>
+          </label>
+        </div>
 
         {/* Laptop Grid */}
         <div className="items-grid">
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="item-box">
               <h3>{item.name}</h3>
               <p className="item-status">
                 {item.available ? "Available" : "Not Available"}
               </p>
-              {item.available ? (
-                <Link to={`/borrow/${item.id}`} className="borrow-btn">
-                  Borrow
-                </Link>
-              ) : (
-                <button disabled className="not-available-btn">
-                  Not Available
-                </button>
-              )}
+              <p className="item-rating">⭐ {item.rating}</p>
+              {/* Link to ItemDetails page */}
+              <Link to={`/item-details/${item.id}`} className="item-details-btn">
+                View Details
+              </Link>
             </div>
           ))}
         </div>
