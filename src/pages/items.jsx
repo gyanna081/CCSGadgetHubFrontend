@@ -1,4 +1,3 @@
-// Items.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/CCSGadgetHub1.png";
@@ -7,18 +6,18 @@ const Items = () => {
   const [items, setItems] = useState([]);
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
 
   const location = useLocation();
 
   useEffect(() => {
     const fetchedItems = [
-      { id: 1, name: "Laptop 1", available: true, rating: 5 },
-      { id: 2, name: "Laptop 2", available: true, rating: 4 },
-      { id: 3, name: "Laptop 3", available: false, rating: 3 },
-      { id: 4, name: "Laptop 4", available: true, rating: 5 },
-      { id: 5, name: "Laptop 5", available: false, rating: 3 },
-      { id: 6, name: "Laptop 6", available: true, rating: 4 },
+      { id: 1, name: "Laptop 1", available: true, rating: 5, image: "https://via.placeholder.com/120?text=Laptop+1" },
+      { id: 2, name: "Laptop 2", available: true, rating: 4, image: "https://via.placeholder.com/120?text=Laptop+2" },
+      { id: 3, name: "Laptop 3", available: false, rating: 3, image: "https://via.placeholder.com/120?text=Laptop+3" },
+      { id: 4, name: "Laptop 4", available: true, rating: 5, image: "https://via.placeholder.com/120?text=Laptop+4" },
+      { id: 5, name: "Laptop 5", available: false, rating: 3, image: "https://via.placeholder.com/120?text=Laptop+5" },
+      { id: 6, name: "Laptop 6", available: true, rating: 4, image: "https://via.placeholder.com/120?text=Laptop+6" },
     ];
     setItems(fetchedItems);
   }, []);
@@ -64,7 +63,7 @@ const Items = () => {
           ))}
         </nav>
         <div style={{ marginLeft: "auto" }}>
-          <button className="logout-button">Log Out</button>
+          <Link to="/login" className="logout-link">Log Out</Link>
         </div>
       </div>
 
@@ -122,12 +121,12 @@ const Items = () => {
         <div className="items-grid">
           {filteredItems.map((item) => (
             <div key={item.id} className="item-box">
+              <img src={item.image} alt={item.name} className="item-image" />
               <h3>{item.name}</h3>
               <p className="item-status">
                 {item.available ? "Available" : "Not Available"}
               </p>
               <p className="item-rating">⭐ {item.rating}</p>
-              {/* Link to ItemDetails page */}
               <Link to={`/item-details/${item.id}`} className="item-details-btn">
                 View Details
               </Link>

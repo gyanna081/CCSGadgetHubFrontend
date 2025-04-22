@@ -1,4 +1,3 @@
-// RequestForm.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import logo from "../assets/CCSGadgetHub1.png";
@@ -21,27 +20,23 @@ const RequestForm = () => {
   const [estimatedReturn, setEstimatedReturn] = useState("");
   const [agree, setAgree] = useState(false);
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   useEffect(() => {
     if (fromTime && toTime) {
       const today = new Date();
-  
       const [toHours, toMinutes] = toTime.split(":").map(Number);
-  
-      // Create a Date object for the end time
       const toDate = new Date(today);
       toDate.setHours(toHours, toMinutes, 0, 0);
-  
-      // Add exactly 30 minutes
       const returnDate = new Date(toDate.getTime() + 30 * 60 * 1000);
-  
-      // Cap return time at 11:59 PM if it goes over
+
       const endOfDay = new Date(today);
       endOfDay.setHours(23, 59, 0, 0);
-  
       if (returnDate > endOfDay) {
         returnDate.setHours(23, 59, 0, 0);
       }
-  
+
       const options = {
         weekday: "long",
         year: "numeric",
@@ -55,12 +50,10 @@ const RequestForm = () => {
       setEstimatedReturn("");
     }
   }, [fromTime, toTime]);
-  
-  
 
   return (
     <div className="items-page">
-      {/* Navigation Bar */}
+      {/* Navbar */}
       <div className="navbar">
         <img src={logo} alt="CCS Gadget Hub Logo" />
         <nav>
@@ -75,74 +68,140 @@ const RequestForm = () => {
           ))}
         </nav>
         <div style={{ marginLeft: "auto" }}>
-          <button className="logout-button">Log Out</button>
+          <Link to="/login" className="logout-link">Log Out</Link>
         </div>
       </div>
 
-      {/* Form Content */}
-      <div className="dashboard-container">
-        <Link to="/items" style={{ fontSize: "24px", color: "black" }}>←</Link>
-        <h2 className="items-heading" style={{ marginTop: "10px" }}>Request Form</h2>
+      {/* Form Section */}
+      <div className="request-form-page">
+        <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+          <Link to="/items" className="back-arrow">←</Link>
+        </div>
 
-        <form className="request-form" style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px" }}>
+        <h2 className="request-form-title">Request Form</h2>
+
+        <form className="request-form-container" onSubmit={(e) => e.preventDefault()}>
           {/* Item Name */}
-          <div>
-            <label><strong>Item Name:</strong></label>
-            <input type="text" value={itemName} disabled style={{ width: "100%", padding: "10px", borderRadius: "5px" }} />
+          <div className="input-row full-width">
+            <label>Item Name:</label>
+            <input type="text" value={itemName} disabled />
           </div>
 
-          {/* Reason for Borrowing */}
-          <div>
-            <label><strong>Reason for borrowing:</strong></label>
+          {/* Reason */}
+          <div className="input-row full-width">
+            <label>Reason for borrowing:</label>
             <textarea
               placeholder="State reason here..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows="3"
-              style={{ width: "100%", padding: "10px", borderRadius: "5px" }}
             />
           </div>
 
-          {/* Duration */}
-          <div style={{ display: "flex", gap: "20px" }}>
-            <div style={{ flex: 1 }}>
-              <label><strong>Duration:</strong></label>
+          {/* Duration and Return Time */}
+          <div className="input-row">
+            <div className="full-width">
+              <label>Duration:</label>
               <div style={{ display: "flex", gap: "10px" }}>
-                <input type="time" value={fromTime} onChange={(e) => setFromTime(e.target.value)} style={{ flex: 1, padding: "10px", borderRadius: "5px" }} />
+                <input type="time" value={fromTime} onChange={(e) => setFromTime(e.target.value)} />
                 <span style={{ alignSelf: "center" }}>to</span>
-                <input type="time" value={toTime} onChange={(e) => setToTime(e.target.value)} style={{ flex: 1, padding: "10px", borderRadius: "5px" }} />
+                <input type="time" value={toTime} onChange={(e) => setToTime(e.target.value)} />
               </div>
             </div>
-
-            {/* Return Time (calculated) */}
-            <div style={{ flex: 1 }}>
-              <label><strong>Estimated Return Time:</strong></label>
-              <div style={{ padding: "10px", border: "1px solid #ccc", borderRadius: "5px", background: "#f1f1f1", minHeight: "48px" }}>
-                {estimatedReturn || "Select duration to calculate return time"}
+            <div className="full-width">
+              <label>Return Time:</label>
+              <div className="estimated-return">
+                {estimatedReturn || "Estimated Return Date and Time Calculation here"}
               </div>
             </div>
           </div>
 
           {/* Terms and Agreement */}
-          <div>
-            <label><strong>Terms and Agreement</strong></label>
-            <div style={{ margin: "10px 0", fontSize: "14px", color: "#444" }}>
+          <div className="input-row full-width">
+            <label>Terms and Agreement</label>
+            <div style={{ fontSize: "14px", color: "#444" }}>
               <p>Terms and Agreement here..</p>
               <p>Terms and Agreement here..</p>
               <p>Terms and Agreement here..</p>
               <p>Terms and Agreement here..</p>
             </div>
-            <label>
-              <input type="checkbox" checked={agree} onChange={() => setAgree(!agree)} /> I agree to the terms and conditions.
-            </label>
+
+            <div className="checkbox-row">
+              <label htmlFor="agree">
+                <input
+                  type="checkbox"
+                  id="agree"
+                  checked={agree}
+                  onChange={() => setAgree(!agree)}
+                />
+                I agree to the terms and conditions.
+              </label>
+            </div>
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="custom-button" disabled={!agree}>
-            Submit Request
-          </button>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+            <button
+              type="button"
+              className="submit-btn"
+              disabled={!agree}
+              onClick={() => setShowConfirmModal(true)}
+            >
+              Submit Request
+            </button>
+          </div>
         </form>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3><strong>{itemName}</strong></h3>
+            <p>{reason || "No reason provided."}</p>
+            <p><strong>Duration:</strong><br />{fromTime || "--:--"} - {toTime || "--:--"}</p>
+            <p><strong>Return Time:</strong><br />{estimatedReturn || "--:--"}</p>
+
+            <div className="checkbox-row" style={{ marginTop: "10px" }}>
+              <label>
+                <input type="checkbox" checked readOnly />
+                I agree to return the item in good condition and follow the borrowing policies.
+              </label>
+            </div>
+
+            <div className="modal-actions-centered">
+              <button className="confirm-btn" onClick={() => {
+                setShowConfirmModal(false);
+                setShowSuccessModal(true);
+              }}>
+                Confirm Request
+              </button>
+              <button className="cancel-btn centered-cancel" onClick={() => setShowConfirmModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2 style={{ color: "#d96528", textAlign: "center" }}>
+              Your Request is<br />submitted successfully!
+            </h2>
+            <p style={{ textAlign: "center", marginTop: "10px" }}>
+              Check the status in the <strong>"My Requests"</strong> section.
+            </p>
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <Link to="/items" className="back-link">Back to Items Page</Link>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
