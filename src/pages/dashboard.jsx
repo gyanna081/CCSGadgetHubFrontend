@@ -24,6 +24,12 @@ const Dashboard = () => {
     { label: "Profile", to: "/profile" },
   ];
 
+  const featuredItems = [
+    { id: 1, name: "Dell Laptop", available: true, rating: 5, image: "https://via.placeholder.com/100" },
+    { id: 2, name: "Huawei D15 Matebook", available: false, rating: 4, image: "https://via.placeholder.com/100" },
+    { id: 3, name: "Dell Laptop 2", available: true, rating: 3, image: "https://via.placeholder.com/100" },
+  ];
+
   return (
     <div className="dashboard-page">
       {/* Navigation Bar */}
@@ -34,36 +40,64 @@ const Dashboard = () => {
             <Link
               key={link.to}
               to={link.to}
-              style={{
-                color:
-                  location.pathname === link.to ? "black" : "white",
-              }}
+              className={
+                location.pathname === link.to
+                  ? "navbar-link active-link"
+                  : "navbar-link"
+              }
             >
               {link.label}
             </Link>
           ))}
         </nav>
         <div style={{ marginLeft: "auto" }}>
-          <button className="logout-button" onClick={handleLogout}>
-            Log Out
-          </button>
+          <Link to="/login" className="logout-link">Log Out</Link>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="dashboard-container">
-        {/* Search Bar & Buttons */}
-        <div className="search-container">
-          <input type="text" placeholder="Enter items here" />
-          <button className="custom-button">Borrow Item</button>
-          <button className="custom-button">View Requests</button>
+        <h1 className="dashboard-greeting">Welcome back, Mica!</h1>
+        <p className="dashboard-subtext">Here’s a quick overview of your gadget hub activity.</p>
+
+        {/* Summary Cards */}
+        <div className="summary-cards">
+          <div className="summary-card">
+            <h3>3</h3>
+            <p>Items Borrowed</p>
+          </div>
+          <div className="summary-card">
+            <h3>1</h3>
+            <p>Pending Requests</p>
+          </div>
+          <div className="summary-card">
+            <h3>0</h3>
+            <p>Overdue</p>
+          </div>
+        </div>
+
+        {/* Featured Items Header with Buttons */}
+        <div className="featured-header">
+          <h2 className="featured-title">Featured Items</h2>
+          <div className="featured-buttons">
+            <button className="custom-button" onClick={() => navigate("/items")}>
+              Borrow Item
+            </button>
+            <button className="custom-button" onClick={() => navigate("/my-requests")}>
+              View Requests
+            </button>
+          </div>
         </div>
 
         {/* Featured Items */}
-        <h2 className="featured-title">Featured Items</h2>
         <div className="items-grid">
-          {[...Array(6)].map((_, index) => (
-            <div key={index} className="item-box"></div>
+          {featuredItems.map((item) => (
+            <div key={item.id} className="item-box">
+              <img src={item.image} alt={item.name} className="item-image" />
+              <h4>{item.name}</h4>
+              <p className="item-status">{item.available ? "Available" : "Not Available"}</p>
+              <p className="item-rating">⭐ {item.rating}</p>
+            </div>
           ))}
         </div>
       </div>
