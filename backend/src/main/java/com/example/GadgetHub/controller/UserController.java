@@ -5,6 +5,7 @@ import com.example.GadgetHub.model.User;
 import java.time.LocalDateTime;
 import com.example.GadgetHub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,4 +19,11 @@ public class UserController {
     public User syncUser(@RequestBody FirebaseUserDto firebaseUserDto) {
         return userService.syncUser(firebaseUserDto);
     }
+    @GetMapping("/get-by-uid")
+    public ResponseEntity<User> getUserByUid(@RequestParam String uid) {
+        return userService.getUserByUid(uid)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
 }

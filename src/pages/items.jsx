@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/CCSGadgetHub1.png";  // Assuming logo is also used in items page
+import axios from "axios";
+import logo from "../assets/CCSGadgetHub1.png";
 
 const Items = () => {
   const [items, setItems] = useState([]);
-  const location = useLocation();  // Used for active link styling
+  const location = useLocation();
 
   useEffect(() => {
-    // Example data for laptop items
-    const fetchedItems = [
-      { id: 1, name: "Laptop 1", available: true },
-      { id: 2, name: "Laptop 2", available: true },
-      { id: 3, name: "Laptop 3", available: false },
-      { id: 4, name: "Laptop 4", available: true },
-      { id: 5, name: "Laptop 5", available: false },
-      { id: 6, name: "Laptop 6", available: true },
-    ];
-    setItems(fetchedItems);
+    axios.get("http://localhost:8080/api/items")
+      .then((res) => {
+        setItems(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching items:", err);
+      });
   }, []);
 
-  // Define navigation links just like in Dashboard
   const navLinks = [
     { label: "Dashboard", to: "/dashboard" },
     { label: "Items", to: "/items" },
@@ -28,9 +25,14 @@ const Items = () => {
     { label: "Profile", to: "/profile" },
   ];
 
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "/";
+  };
+
   return (
     <div className="items-page">
-      {/* Navigation Bar */}
       <div className="navbar">
         <img src={logo} alt="CCS Gadget Hub Logo" />
         <nav>
@@ -45,24 +47,39 @@ const Items = () => {
           ))}
         </nav>
         <div style={{ marginLeft: "auto" }}>
-          <button className="logout-button">Log Out</button>
+          <button className="logout-button" onClick={handleLogout}>Log Out</button>
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="dashboard-container">
-        <h2 className="featured-title">Available Laptops</h2>
+        <h2 className="featured-title">Available Items</h2>
 
-        {/* Laptop Grid */}
         <div className="items-grid">
           {items.map((item) => (
-            <div key={item.id} className="item-box">
+            <div key={item.itemId} className="item-box">
+              {/* IMAGE */}
+              {item.imagePath && (
+                <img
+                  src={`http://localhost:8080/uploads/${item.imagePath}`} // ✅ uploads + imagePath (not image_path)
+                  alt={item.name}
+                  style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px 8px 0 0" }}
+                />
+              )}
+              {/* NAME */}
               <h3>{item.name}</h3>
-              <p className="item-status">
-                {item.available ? "Available" : "Not Available"}
+              {/* DESCRIPTION */}
+              <p>{item.description ? item.description : "No description available"}</p>
+              {/* CONDITION */}
+              <p style={{ fontSize: "14px", color: "gray" }}>
+                Condition: <strong>{item.condition ? item.condition : "N/A"}</strong>
               </p>
-              {item.available ? (
-                <Link to={`/borrow/${item.id}`} className="borrow-btn">
+              {/* STATUS */}
+              <p className="item-status" style={{ color: item.status === "Available" ? "green" : "red" }}>
+                {item.status}
+              </p>
+
+              {item.status === "Available" ? (
+                <Link to={`/borrow/${item.itemId}`} className="borrow-btn">
                   Borrow
                 </Link>
               ) : (

@@ -5,7 +5,8 @@ import com.example.GadgetHub.model.User;
 import com.example.GadgetHub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,5 +23,9 @@ public class UserService {
             newUser.setRole("student"); // default role
             return userRepository.save(newUser);
         });
+    }
+
+    public Optional<User> getUserByUid(String uid) {
+        return userRepository.findByUid(uid);
     }
 }
