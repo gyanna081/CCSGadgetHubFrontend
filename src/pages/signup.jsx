@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { auth, provider } from "../firebaseconfig";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // import Link properly
 import axios from "axios";
 
 const Signup = () => {
@@ -24,7 +24,6 @@ const Signup = () => {
 
       await syncUserWithBackend(user, firstName, lastName, role);
 
-      // Redirect based on role
       navigate(role === "Admin" ? "/admin" : "/dashboard");
     } catch (err) {
       console.error("Signup error:", err);
@@ -44,7 +43,6 @@ const Signup = () => {
 
       await syncUserWithBackend(user, fname, lname, role);
 
-      // Redirect based on role
       navigate(role === "Admin" ? "/admin" : "/dashboard");
     } catch (err) {
       console.error("Google signup error:", err);
@@ -68,35 +66,95 @@ const Signup = () => {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", width: "100vw", background: "#545454" }}>
-      <div style={{ background: "#ffffff", padding: "3rem", borderRadius: "12px", boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)", textAlign: "center", width: "400px" }}>
-        <h2 style={{ marginBottom: "24px" }}>Sign Up</h2>
-        {error && <div style={{ color: "red", marginBottom: "16px" }}>{error}</div>}
+    <div style={{
+      display: "flex", justifyContent: "center", alignItems: "center",
+      height: "100vh", width: "100vw", background: "#545454"
+    }}>
+      <div style={{
+        background: "#ffffff", padding: "3rem", borderRadius: "12px",
+        boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)", textAlign: "center",
+        width: "400px", maxWidth: "90%"
+      }}>
+        <h2 style={{ color: "#000", fontSize: "26px", fontWeight: "600", marginBottom: "10px" }}>
+          Create Account
+        </h2>
+        <p style={{ color: "#545454", fontSize: "18px", marginBottom: "28px" }}>
+          Sign up to get started
+        </p>
+
+        {error && (
+          <div style={{
+            backgroundColor: "rgba(226, 105, 1, 0.1)", color: "#E26901", fontSize: "14px",
+            padding: "12px", borderRadius: "6px", marginBottom: "16px"
+          }}>
+            {typeof error === "string" ? error : (error.message || "An error occurred")}
+          </div>
+        )}
 
         <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-          <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" style={{ padding: "8px", background: "#E26901", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+          <input
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+            style={{ width: "100%", padding: "14px", borderRadius: "8px", border: "1px solid #ccc", fontSize: "16px" }}
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+            style={{ width: "100%", padding: "14px", borderRadius: "8px", border: "1px solid #ccc", fontSize: "16px" }}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: "14px", borderRadius: "8px", border: "1px solid #ccc", fontSize: "16px" }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: "100%", padding: "14px", borderRadius: "8px", border: "1px solid #ccc", fontSize: "16px" }}
+          />
+          <button type="submit" style={{
+            width: "100%", padding: "14px", background: "#E26901", color: "white",
+            fontSize: "16px", fontWeight: "600", borderRadius: "8px", border: "none",
+            cursor: "pointer"
+          }}>
             Sign Up with Email
           </button>
         </form>
 
-        <div style={{ margin: "16px 0", textAlign: "center" }}>or</div>
+        <div style={{ display: "flex", alignItems: "center", margin: "24px 0" }}>
+          <span style={{ flex: 1, borderBottom: "1px solid #ccc" }}></span>
+          <span style={{ margin: "0 10px", color: "#909090", fontSize: "14px" }}>or</span>
+          <span style={{ flex: 1, borderBottom: "1px solid #ccc" }}></span>
+        </div>
 
         <button
           onClick={handleGoogleSignup}
-          style={{ width: "100%", padding: "8px", background: "#4285f4", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+          style={{
+            width: "100%", padding: "14px", background: "#4285f4", color: "white",
+            fontSize: "16px", fontWeight: "600", borderRadius: "8px", border: "none",
+            cursor: "pointer"
+          }}
         >
           Sign Up with Google
         </button>
 
-        <div style={{ marginTop: "16px" }}>
+        <div style={{ marginTop: "20px", fontSize: "16px", color: "#545454" }}>
           Already have an account?{" "}
-          <span onClick={() => navigate("/")} style={{ color: "#E26901", cursor: "pointer" }}>
+          <Link to="/" style={{ color: "#E26901", fontWeight: "600", cursor: "pointer", textDecoration: "underline" }}>
             Sign In
-          </span>
+          </Link>
         </div>
       </div>
     </div>

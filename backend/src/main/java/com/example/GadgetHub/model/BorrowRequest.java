@@ -1,58 +1,38 @@
 package com.example.GadgetHub.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "borrow_requests")
 public class BorrowRequest {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_id")
-    private Long requestId;
-
-    @ManyToOne
-    @JoinColumn(name = "item_id", referencedColumnName = "item_id")
-    private Item item;
-
-    // ❌ REMOVE the relation to User
-    // ❌ @ManyToOne
-    // ❌ @JoinColumn(name = "borrower_id", referencedColumnName = "user_id")
-    // private User borrower;
-
-    // ✅ Replace with plain borrower_id
-    @Column(name = "borrower_id")
-    private Long borrowerId;
-
-    @Column(name = "request_date")
-    private LocalDateTime requestDate;
-
-    private String status;
-
-    @Column(name = "borrow_duration_days")
-    private Integer borrowDurationDays;
-
-    @Column(name = "borrower_email")
-    private String borrowerEmail;
-
-    @Column(name = "borrower_name")
-    private String borrowerName;
-
-    @Column(name = "item_name")
+    private String id;
+    
+    // Item information
+    private String itemId;
     private String itemName;
-
-    @Column(name = "description")
+    
+    // Borrower information
+    private String borrowerId;    // Matches to userId in the frontend
+    private String borrowerName;  // Matches to userName in the frontend
+    private String borrowerEmail;
+    
+    // Request details
+    private String requestDate;
+    private String startDate;     // When borrowing starts
+    private String endDate;       // When borrowing ends
+    private String status;        // Pending, Approved, Rejected, Returned
+    private String purpose;       // Reason for borrowing
+    private String timeRange;     // Formatted time range for display
+    
+    // Item details
     private String description;
-
-    @Column(name = "item_condition") // fixed this field name too
-    private String itemCondition;
-
-    private String purpose;
+    private String itemCondition; // Matches to condition in the frontend
+    
+    // Additional tracking fields
+    private String createdAt;
+    private String updatedAt;
+    private String returnedAt;
+    private String adminNotes;
+    private String borrowDurationDays;
 }

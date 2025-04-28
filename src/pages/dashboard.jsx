@@ -1,11 +1,14 @@
+import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { auth } from "../firebaseconfig";
 import { signOut } from "firebase/auth";
+import axios from "axios";
 import logo from "../assets/CCSGadgetHub1.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [items, setItems] = useState([]);
 
   const handleLogout = async () => {
     try {
@@ -15,6 +18,21 @@ const Dashboard = () => {
       console.error("Logout failed:", err);
     }
   };
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/items");
+      const allItems = response.data;
+      const lastThreeItems = allItems.slice(-3).reverse();
+      setItems(lastThreeItems);
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const navLinks = [
     { label: "Dashboard", to: "/dashboard" },
@@ -35,8 +53,7 @@ const Dashboard = () => {
               key={link.to}
               to={link.to}
               style={{
-                color:
-                  location.pathname === link.to ? "black" : "white",
+                color: location.pathname === link.to ? "black" : "white",
               }}
             >
               {link.label}
@@ -62,9 +79,39 @@ const Dashboard = () => {
         {/* Featured Items */}
         <h2 className="featured-title">Featured Items</h2>
         <div className="items-grid">
-          {[...Array(6)].map((_, index) => (
-            <div key={index} className="item-box"></div>
-          ))}
+          {items.length > 0 ? (
+            items.map((item) => (
+              <div key={item.item_id} className="item-box" style={{ padding: "20px", background: "#fff", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                {item.imagePath && (
+                  <img
+                    src={`http://localhost:8080/uploads/${item.imagePath}`}
+                    alt={item.name}
+                    style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px" }}
+                  />
+                )}
+                <h3 style={{ margin: "10px 0 5px 0" }}>{item.name}</h3>
+                <p style={{ fontSize: "14px", color: "#666", minHeight: "40px" }}>{item.description}</p>
+                <button
+                  className="view-details-button"
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px 12px",
+                    backgroundColor: "#E26901",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "14px"
+                  }}
+                  onClick={() => navigate(`/item-details/${item.item_id}`)}
+                >
+                  View Details
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No featured items available.</p>
+          )}
         </div>
       </div>
     </div>
