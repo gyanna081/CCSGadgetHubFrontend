@@ -19,7 +19,7 @@ const ItemDetails = () => {
   const location = useLocation();
   
   useEffect(() => {
-    axios.get("http://localhost:8080/api/items")
+    axios.get("https://ccsgadgethub.onrender.com/api/items")
       .then((res) => {
         const foundItem = res.data.find((i) => (i.id || i.itemId) === id);
         setItem(foundItem);

@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/items");
+      const response = await axios.get("https://ccsgadgethub.onrender.com0/api/items");
       const allItems = response.data;
       const lastThreeItems = allItems.slice(-3).reverse();
       setItems(lastThreeItems);

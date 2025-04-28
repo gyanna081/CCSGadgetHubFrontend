@@ -8,7 +8,7 @@ const Items = () => {
   const location = useLocation();
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/items")
+    axios.get("https://ccsgadgethub.onrender.com/api/items")
       .then((res) => {
         setItems(res.data);
       })

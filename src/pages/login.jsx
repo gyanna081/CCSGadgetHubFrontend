@@ -13,7 +13,7 @@ const Login = () => {
 
   const redirectBasedOnRole = async (uid) => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/sync/get-by-uid?uid=${uid}`);
+      const res = await axios.get(`https://ccsgadgethub.onrender.com/api/sync/get-by-uid?uid=${uid}`);
       const user = res.data;
       console.log("User data from backend:", user);
       console.log("User role:", user.role);

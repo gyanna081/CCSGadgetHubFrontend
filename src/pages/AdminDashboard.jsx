@@ -25,7 +25,7 @@ function AdminDashboard() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/items');
+      const response = await axios.get('https://ccsgadgethub.onrender.com/api/items');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -64,7 +64,7 @@ function AdminDashboard() {
       formData.append('image', image);
     }
     try {
-      await axios.post('http://localhost:8080/api/items', formData);
+      await axios.post('https://ccsgadgethub.onrender.com/api/items', formData);
       setItemName('');
       setDescription('');
       setCondition('Good');
@@ -77,7 +77,7 @@ function AdminDashboard() {
 
   const handleUpdateItem = async (item) => {
     try {
-      await axios.put(`http://localhost:8080/api/items/${item.id || item.itemId}`, {
+      await axios.put(`https://ccsgadgethub.onrender.com/api/items/${item.id || item.itemId}`, {
         name: item.name,
         description: item.description,
         condition: item.condition,
@@ -92,7 +92,7 @@ function AdminDashboard() {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/items/${id}`);
+      await axios.delete(`https://ccsgadgethub.onrender.com/api/items/${id}`);
       fetchItems();
     } catch (error) {
       console.error('Error deleting item:', error);

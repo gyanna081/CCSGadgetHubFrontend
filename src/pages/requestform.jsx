@@ -26,7 +26,7 @@ const RequestForm = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/items`)
+    axios.get(`https://ccsgadgethub.onrender.com/api/items`)
       .then(res => {
         const foundItem = res.data.find(it => (it.id || it.itemId) === itemId);
         if (foundItem) {
