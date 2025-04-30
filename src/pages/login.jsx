@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { auth, provider } from "../firebaseconfig";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useNavigate, Link } from "react-router-dom"; // <-- import Link here
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/CCSGadgetHub.png";
+
+// Configure axios defaults
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,21 +14,30 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // Function to get user role and redirect
   const redirectBasedOnRole = async (uid) => {
     try {
-      const res = await axios.get(`https://ccsgadgethub.onrender.com/api/sync/get-by-uid?uid=${uid}`);
-      const user = res.data;
-      console.log("User data from backend:", user);
-      console.log("User role:", user.role);
-      
-      if (user.role === "admin") {
-        navigate("/admindashboard");
-      } else {
+      // Try to get role from backend
+      try {
+        const res = await axios.get(`https://ccsgadgethub.onrender.com/api/sync/get-by-uid?uid=${uid}`);
+        const user = res.data;
+        console.log("User data from backend:", user);
+        console.log("User role:", user.role);
+        
+        if (user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      } catch (roleErr) {
+        console.error("Could not get role, proceeding to dashboard:", roleErr);
+        // Fallback to dashboard if we can't get the role
         navigate("/dashboard");
       }
     } catch (err) {
       console.error("Error in redirectBasedOnRole:", err);
-      setError("Error fetching user role. Please try again.");
+      // Still redirect to dashboard on error
+      navigate("/dashboard");
     }
   };
 
@@ -33,6 +45,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
+      // Step 1: Authenticate with Firebase
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
@@ -41,17 +54,23 @@ const Login = () => {
       const firstName = nameParts[0] || "Unnamed";
       const lastName = nameParts.slice(1).join(' ') || "";
 
-      await axios.post("https://ccsgadgethub.onrender.com/api/sync/user", {
-        uid: user.uid,
-        email: user.email,
-        firstName,
-        lastName
-      }).catch(error => {
-        console.error("Sync user error:", error.response?.data);
-        throw error;
-      });
-
-      redirectBasedOnRole(user.uid);
+      // Step 2: Try to sync with backend, but don't block login if it fails
+      try {
+        await axios.post("https://ccsgadgethub.onrender.com/api/sync/user", {
+          uid: user.uid,
+          email: user.email,
+          firstName,
+          lastName
+        });
+        console.log("Backend sync successful");
+        
+        // If sync succeeds, redirect based on role
+        redirectBasedOnRole(user.uid);
+      } catch (syncError) {
+        console.error("Backend sync failed:", syncError);
+        // Even if sync fails, let the user proceed to dashboard
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.error("Login error:", err);
       if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found") {
@@ -64,6 +83,7 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
+      // Step 1: Authenticate with Google
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
@@ -72,17 +92,23 @@ const Login = () => {
       const firstName = nameParts[0] || "Unnamed";
       const lastName = nameParts.slice(1).join(' ') || "";
 
-      await axios.post("https://ccsgadgethub.onrender.com/api/sync/user", {
-        uid: user.uid,
-        email: user.email,
-        firstName,
-        lastName
-      }).catch(error => {
-        console.error("Sync user error:", error.response?.data);
-        throw error;
-      });
-
-      redirectBasedOnRole(user.uid);
+      // Step 2: Try to sync with backend, but don't block login if it fails
+      try {
+        await axios.post("https://ccsgadgethub.onrender.com/api/sync/user", {
+          uid: user.uid,
+          email: user.email,
+          firstName,
+          lastName
+        });
+        console.log("Backend sync successful");
+        
+        // If sync succeeds, redirect based on role
+        redirectBasedOnRole(user.uid);
+      } catch (syncError) {
+        console.error("Backend sync failed:", syncError);
+        // Even if sync fails, let the user proceed to dashboard
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.error("Google login error:", err);
       setError(typeof err === "string" ? err : err.message || "Google Sign-In failed");
