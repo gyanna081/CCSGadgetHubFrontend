@@ -84,7 +84,7 @@ const Dashboard = () => {
               <div key={item.item_id} className="item-box" style={{ padding: "20px", background: "#fff", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
                 {item.imagePath && (
                   <img
-                    src={`http://localhost:8080/uploads/${item.imagePath}`}
+                    src={`https://ccsgadgethub.onrender.com/${item.imagePath}`}
                     alt={item.name}
                     style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px" }}
                   />
